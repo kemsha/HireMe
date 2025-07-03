@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 import { getUserProfile, getUserPosts } from '../services/userService';
 import { User } from '../types/user';
+import { useRoute } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const numColumns = 3;
@@ -29,6 +30,11 @@ export default function ProfileScreen({ navigation }: any) {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [menuVisible, setMenuVisible] = useState(false);
+  const route = useRoute()
+  const routeParams = route.params as { userId?: string; userName?: string; isViewingOtherProfile?: boolean}
+  const isViewingOwnProfile = !routeParams?.isViewingOtherProfile
+  const targetUserId = routeParams?.userId || user?.uid
+  const targetUserName = routeParams?.userName
 
   const handleLogout = async () => {
     try {
@@ -81,7 +87,7 @@ export default function ProfileScreen({ navigation }: any) {
     };
 
     fetchUserData();
-  }, [user?.uid]);
+  }, [targetUserId]);
 
   const renderPost = ({ item }: { item: any }) => (
     <TouchableOpacity style={styles.postTile}>
