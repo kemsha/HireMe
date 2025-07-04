@@ -21,7 +21,7 @@ import { useAuth } from '../context/AuthContext';
 import { db } from '../config/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 
-// Add a local type for UI
+
 interface PostWithLikeUI extends Post {
   likedByCurrentUser: boolean;
 }
@@ -29,7 +29,6 @@ interface PostWithLikeUI extends Post {
 const PostItem = ({ post, onLike, onCommentPress, onApply, canApply, applying }: { post: PostWithLikeUI; onLike: () => void; onCommentPress: () => void; onApply?: () => void; canApply?: boolean; applying?: boolean }) => (
   <View style={styles.postContainer}>
     <View style={styles.postHeader}>
-      {/* No user image for now */}
       <Text style={styles.username}>
         {post.username} <Text style={styles.userType}>({post.userType})</Text>
       </Text>
@@ -49,13 +48,12 @@ const PostItem = ({ post, onLike, onCommentPress, onApply, canApply, applying }:
         <Text style={styles.commentsText}>{post.comments?.length || 0} comments</Text>
       </View>
       <Text style={styles.caption}>{post.caption}</Text>
-      {/* Apply button for seekers on applicable posts */}
+
       {canApply && (
         <TouchableOpacity style={styles.applyButton} onPress={onApply} disabled={applying}>
           <Text style={styles.applyButtonText}>{applying ? 'Applying...' : 'Apply'}</Text>
         </TouchableOpacity>
       )}
-      {/* Show 'View all comments' link if more than 2 comments */}
       {post.comments && post.comments.length > 2 && (
         <TouchableOpacity onPress={onCommentPress}>
           <Text style={styles.viewAllCommentsText}>
@@ -63,7 +61,6 @@ const PostItem = ({ post, onLike, onCommentPress, onApply, canApply, applying }:
           </Text>
         </TouchableOpacity>
       )}
-      {/* Show up to 2 most recent comments below the caption */}
       {post.comments && post.comments.length > 0 && (
         post.comments.slice(-2).map((comment, idx) => (
           <View key={comment.id} style={styles.inlineComment}>
@@ -91,14 +88,12 @@ export default function HomeScreen() {
     setLoading(true);
     try {
       const data = await fetchPosts();
-      // Add likedByCurrentUser property for UI
       const postsWithLike: PostWithLikeUI[] = data.map(post => ({
         ...post,
         likedByCurrentUser: !!(user && post.likes?.includes(user.uid)),
       }));
       setPosts(postsWithLike);
     } catch (e) {
-      // Optionally handle error
     } finally {
       setLoading(false);
     }
@@ -149,7 +144,6 @@ export default function HomeScreen() {
       await applyToPost(post.id, user.uid, user.username);
       await loadPosts();
     } catch (e) {
-      // Optionally show error
     } finally {
       setApplyingPostId(null);
     }

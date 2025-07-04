@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, FlatList, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { searchUsersByUsername, getUserPosts, getUserProfile } from '../services/userService';
 import { User } from '../types/user';
-import { useNavigation } from '@react-navigation/native';
 
 const SearchScreen: React.FC = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigation = useNavigation();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedUserPosts, setSelectedUserPosts] = useState<any[]>([]);
   const [profileLoading, setProfileLoading] = useState(false);
@@ -30,7 +28,6 @@ const SearchScreen: React.FC = () => {
     setProfileLoading(true);
     setSelectedUser(user);
     try {
-      // Optionally, fetch latest profile and posts
       const userProfile = await getUserProfile(user.uid);
       setSelectedUser(userProfile || user);
       const posts = await getUserPosts(user.uid);
@@ -55,7 +52,6 @@ const SearchScreen: React.FC = () => {
     </TouchableOpacity>
   );
 
-  // Inline profile view for selected user
   const renderSelectedUserProfile = () => {
     if (profileLoading) {
       return <Text style={{ textAlign: 'center', marginTop: 24 }}>Loading profile...</Text>;

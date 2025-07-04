@@ -14,8 +14,6 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useAuth } from '../context/AuthContext';
 import { User } from '../types/user';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 

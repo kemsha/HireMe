@@ -71,8 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       console.log('Updating user data:', JSON.stringify(updateData, null, 2));
       await setDoc(userRef, updateData, { merge: true });
-      
-      // Refresh user data
+
       const firebaseUser = auth.currentUser;
       if (firebaseUser) {
         await fetchUserData(firebaseUser);
@@ -141,7 +140,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           updatedAt: userData.updatedAt?.toDate(),
         });
       } else {
-        // If the user document doesn't exist, sign them out and throw an error
         await auth.signOut();
         throw new Error('User profile not found. Please contact support.');
       }

@@ -32,9 +32,7 @@ export default function ProfileScreen({ navigation }: any) {
   const [menuVisible, setMenuVisible] = useState(false);
   const route = useRoute()
   const routeParams = route.params as { userId?: string; userName?: string; isViewingOtherProfile?: boolean}
-  const isViewingOwnProfile = !routeParams?.isViewingOtherProfile
   const targetUserId = routeParams?.userId || user?.uid
-  const targetUserName = routeParams?.userName
 
   const handleLogout = async () => {
     try {
@@ -56,8 +54,7 @@ export default function ProfileScreen({ navigation }: any) {
       try {
         setLoading(true);
         console.log('Fetching profile for user:', user.uid);
-        
-        // Fetch profile first
+
         const userProfile = await getUserProfile(user.uid);
         console.log('Fetched profile data:', JSON.stringify(userProfile, null, 2));
         
@@ -69,13 +66,12 @@ export default function ProfileScreen({ navigation }: any) {
 
         setProfileData(userProfile);
 
-        // Then try to fetch posts
+
         try {
           const userPosts = await getUserPosts(user.uid);
         setPosts(userPosts);
         } catch (postError) {
           console.error('Error fetching posts:', postError);
-          // Don't show error to user, just set empty posts
           setPosts([]);
         }
       } catch (error) {
